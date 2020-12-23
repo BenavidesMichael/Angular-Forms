@@ -38,6 +38,8 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { LayoutModule } from '@angular/cdk/layout';
+
 // Material Data tables
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
@@ -47,6 +49,7 @@ import { MatTableModule } from '@angular/material/table';
   declarations: [],
   imports: [
     CommonModule,
+    LayoutModule,
     MatAutocompleteModule,
     MatCheckboxModule,
     MatDatepickerModule,
@@ -84,6 +87,7 @@ import { MatTableModule } from '@angular/material/table';
     MatTableModule
   ],
   exports: [
+    LayoutModule,
     MatAutocompleteModule,
     MatCheckboxModule,
     MatDatepickerModule,
