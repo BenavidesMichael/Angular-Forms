@@ -19,7 +19,10 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "@material/*": ["src/app/material/*"]
+    },
   },
   "angularCompilerOptions": {
     "strictInjectionParameters": true,

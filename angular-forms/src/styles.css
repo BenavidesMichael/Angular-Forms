@@ -9,3 +9,21 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+
+.my-class-css-valid-form {
+  border: 2px solid green;
+}
+
+.my-class-css-invalid-form {
+  border: 2px solid red;
+}
+
+.message-error {
+  opacity: 0;
+  transition: all 0.5s ease-in;
+}
+
+.active-message-error {
+  opacity: 1;
+}
