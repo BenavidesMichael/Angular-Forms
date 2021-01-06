@@ -2,9 +2,11 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { BasicFormComponent } from './basic-form/basic-form.component';
 import { HomeComponent } from './home/home.component';
+import { PeopleComponent } from './people/people.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
+  { path: 'people', component: PeopleComponent },
   { path: 'basic-form', component: BasicFormComponent },
   { path: '', component: HomeComponent },
   { path: '**', redirectTo: 'home' }

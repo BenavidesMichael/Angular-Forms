@@ -11,6 +11,7 @@ import { NavComponent } from './nav/nav.component';
 import { HomeComponent } from './home/home.component';
 import { FormsComponent } from './forms/forms.component';
 import { BasicFormComponent } from './basic-form/basic-form.component';
+import { PeopleComponent } from './people/people.component';
 
 @NgModule({
   declarations: [
@@ -18,14 +19,15 @@ import { BasicFormComponent } from './basic-form/basic-form.component';
     NavComponent,
     HomeComponent,
     FormsComponent,
-    BasicFormComponent
+    BasicFormComponent,
+    PeopleComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     MaterialModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
