@@ -10,8 +10,7 @@ import { MaterialModule } from './material/material.module';
 import { NavComponent } from './nav/nav.component';
 import { HomeComponent } from './home/home.component';
 import { FormsComponent } from './forms/forms.component';
-import { BasicFormComponent } from './basic-form/basic-form.component';
-import { PeopleComponent } from './people/people.component';
+import { BasicFormModule } from './basic-form/basic-form.module';
 
 @NgModule({
   declarations: [
@@ -19,8 +18,6 @@ import { PeopleComponent } from './people/people.component';
     NavComponent,
     HomeComponent,
     FormsComponent,
-    BasicFormComponent,
-    PeopleComponent
   ],
   imports: [
     BrowserModule,
@@ -28,6 +25,7 @@ import { PeopleComponent } from './people/people.component';
     AppRoutingModule,
     MaterialModule,
     ReactiveFormsModule,
+    BasicFormModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

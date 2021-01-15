@@ -4,15 +4,15 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 
-import { PeopleComponent } from './people.component';
+import { DatalistComponent } from './datalist.component';
 
-describe('PeopleComponent', () => {
-  let component: PeopleComponent;
-  let fixture: ComponentFixture<PeopleComponent>;
+describe('DatalistComponent', () => {
+  let component: DatalistComponent;
+  let fixture: ComponentFixture<DatalistComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ PeopleComponent ],
+      declarations: [ DatalistComponent ],
       imports: [
         NoopAnimationsModule,
         MatPaginatorModule,
@@ -23,7 +23,7 @@ describe('PeopleComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PeopleComponent);
+    fixture = TestBed.createComponent(DatalistComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

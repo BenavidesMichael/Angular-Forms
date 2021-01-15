@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MyValidators } from '../Validators/password.validator';
+import { MyValidators } from '../../../Validators/password.validator';
 
 @Component({
   selector: 'app-basic-form',

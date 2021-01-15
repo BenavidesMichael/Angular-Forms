@@ -3,16 +3,44 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { map } from 'rxjs/operators';
 import { Observable, of as observableOf, merge } from 'rxjs';
-import { People } from '../models/people';
-import { EXAMPLE_DATA } from '../data/data';
+
+// TODO: Replace this with your own data model type
+export interface DatalistItem {
+  name: string;
+  id: number;
+}
+
+// TODO: replace this with real data from your application
+const EXAMPLE_DATA: DatalistItem[] = [
+  {id: 1, name: 'Hydrogen'},
+  {id: 2, name: 'Helium'},
+  {id: 3, name: 'Lithium'},
+  {id: 4, name: 'Beryllium'},
+  {id: 5, name: 'Boron'},
+  {id: 6, name: 'Carbon'},
+  {id: 7, name: 'Nitrogen'},
+  {id: 8, name: 'Oxygen'},
+  {id: 9, name: 'Fluorine'},
+  {id: 10, name: 'Neon'},
+  {id: 11, name: 'Sodium'},
+  {id: 12, name: 'Magnesium'},
+  {id: 13, name: 'Aluminum'},
+  {id: 14, name: 'Silicon'},
+  {id: 15, name: 'Phosphorus'},
+  {id: 16, name: 'Sulfur'},
+  {id: 17, name: 'Chlorine'},
+  {id: 18, name: 'Argon'},
+  {id: 19, name: 'Potassium'},
+  {id: 20, name: 'Calcium'},
+];
 
 /**
- * Data source for the People view. This class should
+ * Data source for the Datalist view. This class should
  * encapsulate all logic for fetching and manipulating the displayed data
  * (including sorting, pagination, and filtering).
  */
-export class PeopleDataSource extends DataSource<People> {
-  data: People[] = EXAMPLE_DATA;
+export class DatalistDataSource extends DataSource<DatalistItem> {
+  data: DatalistItem[] = EXAMPLE_DATA;
   paginator!: MatPaginator;
   sort!: MatSort;
 
@@ -21,18 +49,17 @@ export class PeopleDataSource extends DataSource<People> {
   }
 
   /**
-   * Connect this data source to the table.
-   * The table will only update when
+   * Connect this data source to the table. The table will only update when
    * the returned stream emits new items.
    * @returns A stream of the items to be rendered.
    */
-  connect(): Observable<People[]> {
+  connect(): Observable<DatalistItem[]> {
     // Combine everything that affects the rendered data into one update
     // stream for the data-table to consume.
     const dataMutations = [
       observableOf(this.data),
-      this.paginator?.page,
-      this.sort?.sortChange
+      this.paginator.page,
+      this.sort.sortChange
     ];
 
     return merge(...dataMutations).pipe(map(() => {
@@ -50,16 +77,16 @@ export class PeopleDataSource extends DataSource<People> {
    * Paginate the data (client-side). If you're using server-side pagination,
    * this would be replaced by requesting the appropriate data from the server.
    */
-  private getPagedData(data: People[]) {
-    const startIndex = this.paginator?.pageIndex * this.paginator?.pageSize;
-    return data.splice(startIndex, this.paginator?.pageSize);
+  private getPagedData(data: DatalistItem[]) {
+    const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
+    return data.splice(startIndex, this.paginator.pageSize);
   }
 
   /**
    * Sort the data (client-side). If you're using server-side sorting,
    * this would be replaced by requesting the appropriate data from the server.
    */
-  private getSortedData(data: People[]) {
+  private getSortedData(data: DatalistItem[]) {
     if (!this.sort.active || this.sort.direction === '') {
       return data;
     }
@@ -74,7 +101,6 @@ export class PeopleDataSource extends DataSource<People> {
     });
   }
 }
-
 
 /** Simple sort comparator for example ID/Name columns (for client-side sorting). */
 function compare(a: string | number, b: string | number, isAsc: boolean) {
