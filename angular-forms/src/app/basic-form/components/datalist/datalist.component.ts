@@ -2,6 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { DatalistDataSource, DatalistItem } from './datalist-datasource';
 
 @Component({
@@ -21,8 +22,14 @@ export class DatalistComponent implements AfterViewInit, OnInit {
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['id', 'name'];
 
+  constructor(private router: Router) { }
+
   ngOnInit() {
     this.dataSource = new DatalistDataSource();
+  }
+
+  create() {
+    this.router.navigate(['basic-form/form']);
   }
 
   ngAfterViewInit() {

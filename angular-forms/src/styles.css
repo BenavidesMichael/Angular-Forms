@@ -27,3 +27,7 @@ body {
 .active-message-error {
   opacity: 1;
 }
+
+.container {
+  margin: 10px;
+}

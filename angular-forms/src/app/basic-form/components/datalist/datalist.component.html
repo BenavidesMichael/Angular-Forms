@@ -1,4 +1,12 @@
-<div class="mat-elevation-z8">
+<!-- button Create -->
+<div class="container" fxLayout="row" fxLayoutAlign="end center">
+  <button mat-raised-button color="primary" (click)="create()">Create</button>
+</div>
+<!-- End - button Create -->
+
+<!-- datatable -->
+<div class="mat-elevation-z8 container">
+  <!-- Table -->
   <table mat-table class="full-width-table" matSort aria-label="Elements">
     <!-- Id Column -->
     <ng-container matColumnDef="id">
@@ -15,11 +23,12 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
+  <!-- End - Table -->
 
-  <mat-paginator #paginator
-      [length]="dataSource?.data?.length"
-      [pageIndex]="0"
-      [pageSize]="10"
-      [pageSizeOptions]="[5, 10, 20, 25]">
+  <!-- pagination -->
+  <mat-paginator #paginator [length]="dataSource?.data?.length" [pageIndex]="0" [pageSize]="5"
+    [pageSizeOptions]="[5, 10, 20, 25]">
   </mat-paginator>
+  <!-- End - pagination -->
 </div>
+<!-- End - datatable -->
