@@ -3,7 +3,9 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { DatalistDataSource, DatalistItem } from './datalist-datasource';
+import { UserForm } from '../../models/user-fom';
+import { BasicFormService } from '../../services/basic-form.service';
+import { DatalistDataSource } from './datalist-datasource';
 
 @Component({
   selector: 'app-datalist',
@@ -11,25 +13,37 @@ import { DatalistDataSource, DatalistItem } from './datalist-datasource';
   styleUrls: ['./datalist.component.css']
 })
 export class DatalistComponent implements AfterViewInit, OnInit {
-  @ViewChild(MatPaginator)
-  paginator!: MatPaginator;
-  @ViewChild(MatSort)
-  sort!: MatSort;
-  @ViewChild(MatTable)
-  table!: MatTable<DatalistItem>;
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatTable) table!: MatTable<UserForm>;
   dataSource!: DatalistDataSource;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['id', 'name'];
+  displayedColumns = [
+    'id',
+    'fullName',
+    'email',
+    'photo',
+    'action'
+  ];
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private basicFormService: BasicFormService) { }
 
   ngOnInit() {
-    this.dataSource = new DatalistDataSource();
+    this.dataSource = new DatalistDataSource(this.basicFormService);
+    this.dataSource.loadUserData();
   }
 
   create() {
     this.router.navigate(['basic-form/form']);
+  }
+
+
+  edit(model: any) {
+    console.group(model);
   }
 
   ngAfterViewInit() {

@@ -1,92 +1,70 @@
-import { DataSource } from '@angular/cdk/collections';
+import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { map } from 'rxjs/operators';
+import { catchError, finalize, map } from 'rxjs/operators';
 import { Observable, of as observableOf, merge } from 'rxjs';
+import { UserForm } from '../../models/user-fom';
+import { BehaviorSubject } from 'rxjs';
+import { BasicFormService } from '../../services/basic-form.service';
+import { of } from 'rxjs/internal/observable/of';
 
-// TODO: Replace this with your own data model type
-export interface DatalistItem {
-  name: string;
-  id: number;
-}
 
-// TODO: replace this with real data from your application
-const EXAMPLE_DATA: DatalistItem[] = [
-  {id: 1, name: 'Hydrogen'},
-  {id: 2, name: 'Helium'},
-  {id: 3, name: 'Lithium'},
-  {id: 4, name: 'Beryllium'},
-  {id: 5, name: 'Boron'},
-  {id: 6, name: 'Carbon'},
-  {id: 7, name: 'Nitrogen'},
-  {id: 8, name: 'Oxygen'},
-  {id: 9, name: 'Fluorine'},
-  {id: 10, name: 'Neon'},
-  {id: 11, name: 'Sodium'},
-  {id: 12, name: 'Magnesium'},
-  {id: 13, name: 'Aluminum'},
-  {id: 14, name: 'Silicon'},
-  {id: 15, name: 'Phosphorus'},
-  {id: 16, name: 'Sulfur'},
-  {id: 17, name: 'Chlorine'},
-  {id: 18, name: 'Argon'},
-  {id: 19, name: 'Potassium'},
-  {id: 20, name: 'Calcium'},
-];
+export class DatalistDataSource extends DataSource<UserForm> {
 
-/**
- * Data source for the Datalist view. This class should
- * encapsulate all logic for fetching and manipulating the displayed data
- * (including sorting, pagination, and filtering).
- */
-export class DatalistDataSource extends DataSource<DatalistItem> {
-  data: DatalistItem[] = EXAMPLE_DATA;
+  private UsersSubject = new BehaviorSubject<UserForm[]>([]);
+  private loadingSubject = new BehaviorSubject<boolean>(false);
+  public loading$ = this.loadingSubject.asObservable();
+
+  data: UserForm[] = [];
   paginator!: MatPaginator;
   sort!: MatSort;
 
-  constructor() {
+  constructor(private basicFormService: BasicFormService) {
     super();
   }
 
-  /**
-   * Connect this data source to the table. The table will only update when
-   * the returned stream emits new items.
-   * @returns A stream of the items to be rendered.
-   */
-  connect(): Observable<DatalistItem[]> {
-    // Combine everything that affects the rendered data into one update
-    // stream for the data-table to consume.
-    const dataMutations = [
-      observableOf(this.data),
-      this.paginator.page,
-      this.sort.sortChange
-    ];
 
-    return merge(...dataMutations).pipe(map(() => {
-      return this.getPagedData(this.getSortedData([...this.data]));
-    }));
+  loadUserData() {
+    this.loadingSubject.next(true);
+
+    this.basicFormService.getalldata().pipe(
+        catchError(() => of([])),
+        finalize(() => this.loadingSubject.next(false))
+      )
+      .subscribe(result => {
+        console.log(result);
+        this.UsersSubject.next(result);
+      });
   }
 
-  /**
-   *  Called when the table is being destroyed. Use this function, to clean up
-   * any open connections or free any held resources that were set up during connect.
-   */
-  disconnect() {}
 
-  /**
-   * Paginate the data (client-side). If you're using server-side pagination,
-   * this would be replaced by requesting the appropriate data from the server.
-   */
-  private getPagedData(data: DatalistItem[]) {
+  connect(collectionViewer: CollectionViewer): Observable<UserForm[]> {
+    // const dataMutations = [
+    //   observableOf(this.data),
+    //   this.paginator.page,
+    //   this.sort.sortChange
+    // ];
+
+    return this.UsersSubject.asObservable();
+    // return merge(...dataMutations).pipe(map(() => {
+    //   return this.getPagedData(this.getSortedData([...this.data]));
+    // }));
+  }
+
+
+  disconnect(collectionViewer: CollectionViewer) {
+    this.UsersSubject.complete();
+    this.loadingSubject.complete();
+  }
+
+
+  private getPagedData(data: UserForm[]) {
     const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
     return data.splice(startIndex, this.paginator.pageSize);
   }
 
-  /**
-   * Sort the data (client-side). If you're using server-side sorting,
-   * this would be replaced by requesting the appropriate data from the server.
-   */
-  private getSortedData(data: DatalistItem[]) {
+
+  private getSortedData(data: UserForm[]) {
     if (!this.sort.active || this.sort.direction === '') {
       return data;
     }
@@ -94,7 +72,7 @@ export class DatalistDataSource extends DataSource<DatalistItem> {
     return data.sort((a, b) => {
       const isAsc = this.sort.direction === 'asc';
       switch (this.sort.active) {
-        case 'name': return compare(a.name, b.name, isAsc);
+        case 'name': return compare(a.email, b.email, isAsc);
         case 'id': return compare(+a.id, +b.id, isAsc);
         default: return 0;
       }
@@ -102,7 +80,7 @@ export class DatalistDataSource extends DataSource<DatalistItem> {
   }
 }
 
-/** Simple sort comparator for example ID/Name columns (for client-side sorting). */
+
 function compare(a: string | number, b: string | number, isAsc: boolean) {
   return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }

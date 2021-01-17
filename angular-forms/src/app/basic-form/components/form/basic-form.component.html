@@ -11,77 +11,84 @@
 
 <!-- form -->
 <form class="container" [formGroup]="myFormGroup" (ngSubmit)="save()">
-  <!-- fullname -->
-  <div formGroupName="fullName">
-    <!-- nameField -->
-    <mat-form-field appearance="outline">
-      <mat-label>Name</mat-label>
-      <input [class.my-class-css-valid-form]="isNameFieldIsValid"
-        [class.my-class-css-invalid-form]="isNameFieldIsInValid" matInput type="text" formControlName="name">
-      <mat-hint><strong>Value: </strong> {{nameField?.value}}</mat-hint>
-    </mat-form-field>
+  <div fxLayout="row" fxLayoutAlign="space-between">
+    <!-- fullname -->
+    <div formGroupName="fullName">
+      <!-- nameField -->
+      <mat-form-field class="container" appearance="outline">
+        <mat-label>Name</mat-label>
+        <input [class.my-class-css-valid-form]="isNameFieldIsValid"
+          [class.my-class-css-invalid-form]="isNameFieldIsInValid" matInput type="text" formControlName="name">
+        <mat-hint><strong>Value: </strong> {{nameField?.value}}</mat-hint>
+      </mat-form-field>
 
-    <div class="message-error" [class.active-message-error]="isNameFieldIsInValid">
-      <!-- <mat-error *ngIf="nameField.hasError('required')">This field is<strong>Required</strong></mat-error> -->
-      <mat-error *ngIf="nameField?.touched && nameField?.hasError('required')">This field is <strong>Required</strong>
-      </mat-error>
-      <mat-error *ngIf="nameField?.hasError('maxlength')">This field must have max <strong>10</strong> characters
-      </mat-error>
-      <mat-error *ngIf="nameField?.hasError('pattern')">This Name isn't correct </mat-error>
+      <div class="message-error" [class.active-message-error]="isNameFieldIsInValid">
+        <!-- <mat-error *ngIf="nameField.hasError('required')">This field is<strong>Required</strong></mat-error> -->
+        <mat-error *ngIf="nameField?.touched && nameField?.hasError('required')">This field is <strong>Required</strong>
+        </mat-error>
+        <mat-error *ngIf="nameField?.hasError('maxlength')">This field must have max <strong>10</strong> characters
+        </mat-error>
+        <mat-error *ngIf="nameField?.hasError('pattern')">This Name isn't correct </mat-error>
+      </div>
+      <!-- End - nameField -->
+
+      <!-- lastnameField -->
+      <mat-form-field class="container" appearance="outline">
+        <mat-label>Last Name</mat-label>
+        <input matInput type="text" formControlName="lastname">
+        <mat-hint><strong>Value: </strong> {{lastnameField?.value}}</mat-hint>
+
+        <mat-error *ngIf="lastnameField?.hasError('required')">This field is <strong>Required</strong>
+        </mat-error>
+        <mat-error *ngIf="lastnameField?.hasError('maxlength')">This field must have max <strong>10</strong> characters
+        </mat-error>
+        <mat-error *ngIf="lastnameField?.hasError('pattern')">This Name isn't correct </mat-error>
+      </mat-form-field>
+      <!-- End - lastnameField -->
     </div>
-    <!-- End - nameField -->
-
-    <!-- lastnameField -->
-    <mat-form-field appearance="outline">
-      <mat-label>Last Name</mat-label>
-      <input matInput type="text" formControlName="lastname">
-      <mat-hint><strong>Value: </strong> {{lastnameField?.value}}</mat-hint>
-
-      <mat-error *ngIf="lastnameField?.hasError('required')">This field is <strong>Required</strong>
-      </mat-error>
-      <mat-error *ngIf="lastnameField?.hasError('maxlength')">This field must have max <strong>10</strong> characters
-      </mat-error>
-      <mat-error *ngIf="lastnameField?.hasError('pattern')">This Name isn't correct </mat-error>
-    </mat-form-field>
-    <!-- End - lastnameField -->
+    <!-- End - fullname -->
   </div>
-  <!-- End - fullname -->
 
-  <!-- email -->
-  <mat-form-field appearance="outline">
-    <mat-label>Email</mat-label>
-    <input matInput type="email" placeholder="exemple@email.be" formControlName="email">
-    <mat-hint><strong>Value: </strong> {{emailField?.value}}</mat-hint>
-    <mat-error *ngIf="emailField?.touched && emailField?.hasError('required')">This field is <strong>Required</strong>
-    </mat-error>
-    <mat-error *ngIf="emailField?.touched && emailField?.hasError('email')">This isn't a valid email </mat-error>
-  </mat-form-field>
-  <!-- End - email -->
+  <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign.xs="start" fxLayoutAlign="start center">
+    <!-- email -->
+    <mat-form-field class="container" appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" placeholder="exemple@email.be" formControlName="email">
+      <mat-hint><strong>Value: </strong> {{emailField?.value}}</mat-hint>
+      <mat-error *ngIf="emailField?.touched && emailField?.hasError('required')">This field is <strong>Required</strong>
+      </mat-error>
+      <mat-error *ngIf="emailField?.touched && emailField?.hasError('email')">This isn't a valid email </mat-error>
+    </mat-form-field>
+    <!-- End - email -->
 
-  <!-- password -->
-  <mat-form-field appearance="outline">
-    <mat-label>Password</mat-label>
-    <input matInput type="test" placeholder="" formControlName="password">
-    <mat-hint><strong>Value: </strong> {{passwordField?.value}}</mat-hint>
-    <mat-error *ngIf="passwordField?.touched && passwordField?.hasError('invalid_password')">invalid password
-    </mat-error>
-  </mat-form-field>
-  <!-- End - password -->
 
-  <!-- confirm password -->
-  <mat-form-field appearance="outline">
-    <mat-label>Confirm Password</mat-label>
-    <input matInput type="test" placeholder="" formControlName="confirmPassword">
-    <mat-hint><strong>Value: </strong> {{confirmPasswordField?.value}}</mat-hint>
-    <mat-error *ngIf="confirmPasswordField?.touched && confirmPasswordField?.hasError('required')">This field is <strong>Required</strong>
-    </mat-error>
-    <mat-error *ngIf="myFormGroup.invalid && myFormGroup?.hasError('match_password')">password not match
-    </mat-error>
-  </mat-form-field>
-  <!-- End - confirm password -->
+    <!-- password -->
+    <mat-form-field class="container" appearance="outline">
+      <mat-label>Password</mat-label>
+      <input matInput type="test" placeholder="" formControlName="password">
+      <mat-hint><strong>Value: </strong> {{passwordField?.value}}</mat-hint>
+      <mat-error *ngIf="passwordField?.touched && passwordField?.hasError('invalid_password')">invalid password
+      </mat-error>
+    </mat-form-field>
+    <!-- End - password -->
+
+
+    <!-- confirm password -->
+    <mat-form-field class="container" appearance="outline">
+      <mat-label>Confirm Password</mat-label>
+      <input matInput type="test" placeholder="" formControlName="confirmPassword">
+      <mat-hint><strong>Value: </strong> {{confirmPasswordField?.value}}</mat-hint>
+      <mat-error *ngIf="confirmPasswordField?.touched && confirmPasswordField?.hasError('required')">This field is
+        <strong>Required</strong>
+      </mat-error>
+      <mat-error *ngIf="myFormGroup.invalid && myFormGroup?.hasError('match_password')">password not match
+      </mat-error>
+    </mat-form-field>
+    <!-- End - confirm password -->
+  </div>
 
   <!-- Phone -->
-  <mat-form-field appearance="outline">
+  <mat-form-field class="container" appearance="outline">
     <mat-label>Phone</mat-label>
     <input matInput type="tel" placeholder="0478 00 00 00" formControlName="phone">
     <mat-hint><strong>Value: </strong> {{phoneField?.value}}</mat-hint>
@@ -91,7 +98,7 @@
   <!-- End - Phone -->
 
   <!-- Color -->
-  <mat-form-field appearance="outline">
+  <mat-form-field class="container" appearance="outline">
     <mat-label>Color</mat-label>
     <input matInput type="color" placeholder="" formControlName="color">
     <mat-hint><strong>Value: </strong> {{colorField?.value}}</mat-hint>
@@ -99,15 +106,25 @@
   <!-- End - Color -->
 
   <!-- Date -->
-  <mat-form-field appearance="outline">
+  <!-- <mat-form-field class="container" appearance="outline">
     <mat-label>Date</mat-label>
     <input matInput type="date" placeholder="24-12-2020" formControlName="date">
     <mat-hint><strong>Value: </strong> {{dateField?.value}}</mat-hint>
-  </mat-form-field>
+  </mat-form-field> -->
   <!-- End - Date -->
 
+  <!-- Date -->
+  <!-- <mat-form-field class="container" appearance="outline">
+    <mat-label>Date</mat-label>
+    <input matInput [matDatepicker]="picker" formControlName="date">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field> -->
+  <!-- End - Date -->
+
+
   <!-- Age -->
-  <mat-form-field appearance="outline">
+  <mat-form-field class="container" appearance="outline">
     <mat-label>Age</mat-label>
     <input matInput type="number" placeholder="30" formControlName="age">
 
@@ -123,33 +140,27 @@
   <!-- End - Age -->
 
   <!-- Category -->
-  <mat-form-field appearance="outline">
+  <mat-form-field class="container" appearance="outline">
     <mat-label>Category</mat-label>
     <mat-select formControlName="category">
-      <mat-option value="category-1">Category 1</mat-option>
-      <mat-option value="category-2">Category 2</mat-option>
-      <mat-option value="category-3">Category 3</mat-option>
-      <mat-option value="category-4">Category 4</mat-option>
+      <mat-option *ngFor="let item of categories" [value]="item">{{item.name}}</mat-option>
     </mat-select>
     <mat-hint><strong>Value: </strong> {{categoryField?.value}}</mat-hint>
   </mat-form-field>
   <!-- End - Category -->
 
   <!-- Tags -->
-  <mat-form-field appearance="outline">
+  <mat-form-field class="container" appearance="outline">
     <mat-label>Tags</mat-label>
     <mat-select formControlName="tag" multiple>
-      <mat-option value="Tags-1">Tags 1</mat-option>
-      <mat-option value="Tags-2">Tags 2</mat-option>
-      <mat-option value="Tags-3">Tags 3</mat-option>
-      <mat-option value="Tags-4">Tags 4</mat-option>
+      <mat-option *ngFor="let item of tags" [value]="item">{{item.name}}</mat-option>
     </mat-select>
     <mat-hint><strong>Value: </strong> {{tagField?.value}}</mat-hint>
   </mat-form-field>
   <!-- End - Tags -->
 
   <!-- Agree -->
-  <div>
+  <div class="container">
     <mat-checkbox formControlName="agree">Agree</mat-checkbox>
     <br />
     <mat-hint><strong>Value: </strong> {{agreeField?.value}}</mat-hint>
@@ -161,50 +172,26 @@
   <br />
 
   <!-- gender -->
-  <!-- /!\ name="gender" ==> permet de definir un group -->
-  <div>
-    <label>
-      <input name="gender" type="radio" value="male" formControlName="gender">
-      Male
-    </label>
-
-    <label>
-      <input name="gender" type="radio" value="female" formControlName="gender">
-      Female
-    </label>
-
-    <label>
-      <input name="gender" type="radio" value="other" formControlName="gender">
-      Other
-    </label>
-    <br />
-    <mat-hint><strong>Value: </strong> {{genderField?.value}}</mat-hint>
-  </div>
+  <mat-radio-group formControlName="gender" aria-label="Select an option">
+    <mat-radio-button class="container" color="primary" *ngFor="let item of genders" [value]="item">{{ item }}
+    </mat-radio-button>
+    <br/>
+    <mat-hint class="container"><strong>Value: </strong> {{genderField?.value}}</mat-hint>
+  </mat-radio-group>
   <!-- End - gender -->
 
-  <br />
+  <br/>
 
   <!-- Zone -->
-  <!-- /!\ name="zone" ==> permet de definir un group -->
-  <div>
-    <label>
-      <input name="zone" type="radio" value="zone-1" formControlName="zone">
-      Zone 1
-    </label>
-
-    <label>
-      <input name="zone" type="radio" value="zone-2" formControlName="zone">
-      Zone 2
-    </label>
-
-    <label>
-      <input name="zone" type="radio" value="zone-3" formControlName="zone">
-      Zone 3
-    </label>
-    <br />
-    <mat-hint><strong>Value: </strong> {{zoneField?.value}}</mat-hint>
-  </div>
+  <mat-radio-group formControlName="zone" aria-label="Select an option">
+    <mat-radio-button class="container" color="primary" *ngFor="let item of zones" [value]="item">{{ item }}
+    </mat-radio-button>
+    <br/>
+    <mat-hint class="container"><strong>Value: </strong> {{zoneField?.value}}</mat-hint>
+  </mat-radio-group>
   <!-- End - Zone -->
+
+  <br/>
 
   <!-- button -->
   <button mat-raised-button color="primary" type="submit">Save</button>

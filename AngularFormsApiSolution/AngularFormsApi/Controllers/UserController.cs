@@ -57,12 +57,12 @@ namespace AngularFormsApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] UserModel model)
+        public async Task<ActionResult> Post([FromBody] UserCreateModel model)
         {
             try
             {
                 await _userRepository.Create(model);
-                return new CreatedAtRouteResult("GetUser", new { id = model.Id }, model);
+                return Ok();
             }
             catch (Exception ex)
             {

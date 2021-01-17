@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { MyValidators } from '../../../Validators/password.validator';
+import { Category } from '../../models/category';
+import { Tag } from '../../models/tag';
+import { UserFormCreate } from '../../models/user-form-create';
+import { BasicFormService } from '../../services/basic-form.service';
 
 @Component({
   selector: 'app-basic-form',
@@ -10,15 +15,47 @@ import { MyValidators } from '../../../Validators/password.validator';
 export class BasicFormComponent implements OnInit {
 
   myFormGroup: FormGroup = new FormGroup({});
+  categories: Category[] = [];
+  tags: Tag[] = [];
+  genders: string[] = [];
+  zones: string[] = [];
 
-  constructor(private myFormBuilder: FormBuilder) {
-    // /!\ Always in constructor.
-    this.InitForm();
+  constructor(
+    private router: Router,
+    private myFormBuilder: FormBuilder,
+    private  basicFormService: BasicFormService) {
+      this.InitForm(); // /!\ Always in constructor.
    }
 
   ngOnInit(): void {
+    this.generateData();
     // this.nameField?.valueChanges.subscribe(x => console.log(x));
     // this.myFormGroup?.valueChanges.subscribe(x => console.log(x));
+  }
+
+
+  generateData() {
+    this.categories = [
+      {id: 1, name: 'category 1'},
+      {id: 2, name: 'category 2'},
+      {id: 3, name: 'category 3'},
+      {id: 4, name: 'category 4'},
+    ];
+
+    this.tags = [
+      {id: 1, name: 'category 1'},
+      {id: 2, name: 'category 2'},
+      {id: 3, name: 'category 3'},
+      {id: 4, name: 'category 4'},
+    ];
+
+    this.genders = [
+      'Man', 'Woman', 'Other',
+    ];
+
+    this.zones = [
+      'Zone 1', 'Zone 2', 'Zone 3',
+    ]
   }
 
 
@@ -124,12 +161,49 @@ export class BasicFormComponent implements OnInit {
   }
 
   save() {
+    console.log(this.myFormGroup);
+
     if (!this.myFormGroup.valid) {
       this.myFormGroup.markAllAsTouched();
       return;
     }
 
-    console.log(this.myFormGroup);
+    const model = this.parseModel(this.myFormGroup.value)
+    this.addUser(model);
+  }
+
+
+  parseModel(formValue: any) {
+    const model: UserFormCreate = {
+      firstName: formValue.fullName.name,
+      lastName: formValue.fullName.lastname,
+      fullName: `${formValue.fullName.name} ${formValue.fullName.lastname}`,
+      age: formValue.age,
+      logo: formValue.logo,
+      email: formValue.email,
+      password: formValue.password,
+      phone: formValue.phone,
+      color: formValue.color,
+      date: formValue.date,
+      category: formValue.category,
+      tag: formValue.tag,
+      gender: formValue.gender,
+      agree: formValue.agree,
+    }
+
+    return model;
+  }
+
+
+
+  addUser(model: UserFormCreate) {
+    this.basicFormService.addData(model).subscribe(
+      x => {
+        console.log('Data Save');
+        this.router.navigate(['/basic-form']);
+      },
+      error => console.log(error),
+    );
   }
 
 }

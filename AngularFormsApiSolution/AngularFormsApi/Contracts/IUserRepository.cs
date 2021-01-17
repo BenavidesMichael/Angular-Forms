@@ -8,7 +8,7 @@ namespace AngularFormsApi.Contracts
     {
         Task<List<UserModel>> GetAll();
         Task<UserModel> GetById(int id);
-        Task Create(UserModel model);
+        Task Create(UserCreateModel model);
         Task Update(UserModel model);
         Task Delete(int id);
     }

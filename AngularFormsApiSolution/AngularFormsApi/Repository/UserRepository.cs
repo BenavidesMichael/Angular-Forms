@@ -70,17 +70,16 @@ namespace AngularFormsApi.Repository
         }
 
 
-        public async Task Create(UserModel model) 
+        public async Task Create(UserCreateModel model) 
         {
             try
             {
                 var userDb = new User()
                 {
-                    Id = model.Id,
                     FullName = $"{model.FirstName} {model.LastName}",
                     Age = model.Age,
                     Agree = model.Agree,
-                    Category = model.Category,
+                    Category = model.Category.Name,
                     Color = model.Color,
                     Date = model.Date,
                     Email = model.Email,
@@ -90,7 +89,7 @@ namespace AngularFormsApi.Repository
                     logo = model.logo,
                     Password = model.Password,
                     Phone = model.Phone,
-                    Tag = model.Tag,
+                    Tag = model.Tag[0].Name,
                 };
 
                 await _db.Users.AddAsync(userDb);
