@@ -1,3 +1,5 @@
+import { DatePipe } from '@angular/common';
+import { HttpEventType } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -19,13 +21,20 @@ export class BasicFormComponent implements OnInit {
   tags: Tag[] = [];
   genders: string[] = [];
   zones: string[] = [];
+  progress: number = 0;
+  message: string = '';
+
+  percentageProgressBar = 0;
+  showProgressBar = false;
+  selectedFile!: File;
+  imageSrc: string = '';
 
   constructor(
     private router: Router,
     private myFormBuilder: FormBuilder,
-    private  basicFormService: BasicFormService) {
-      this.InitForm(); // /!\ Always in constructor.
-   }
+    private basicFormService: BasicFormService) {
+    this.InitForm(); // /!\ Always in constructor.
+  }
 
   ngOnInit(): void {
     this.generateData();
@@ -36,17 +45,17 @@ export class BasicFormComponent implements OnInit {
 
   generateData() {
     this.categories = [
-      {id: 1, name: 'category 1'},
-      {id: 2, name: 'category 2'},
-      {id: 3, name: 'category 3'},
-      {id: 4, name: 'category 4'},
+      { id: 1, name: 'category 1' },
+      { id: 2, name: 'category 2' },
+      { id: 3, name: 'category 3' },
+      { id: 4, name: 'category 4' },
     ];
 
     this.tags = [
-      {id: 1, name: 'category 1'},
-      {id: 2, name: 'category 2'},
-      {id: 3, name: 'category 3'},
-      {id: 4, name: 'category 4'},
+      { id: 1, name: 'tag 1' },
+      { id: 2, name: 'tag 2' },
+      { id: 3, name: 'tag 3' },
+      { id: 4, name: 'tag 4' },
     ];
 
     this.genders = [
@@ -60,34 +69,58 @@ export class BasicFormComponent implements OnInit {
 
 
   private InitForm() {
+    // this.myFormGroup = this.myFormBuilder.group({
+    //   fullName: this.myFormBuilder.group({
+    //     name: ['', [Validators.required, Validators.maxLength(10), Validators.pattern(/^[a-zA-Z ]+$/)]],
+    //     lastname: ['', [Validators.required, Validators.maxLength(10), Validators.pattern(/^[a-zA-Z ]+$/)]]
+    //   }),
+    //   email: ['', [Validators.required, Validators.email]],
+    //   phone: ['',[Validators.required]],
+    //   color: [''],
+    //   logo: ['',[Validators.required]],
+    //   date: [''],
+    //   age: [30, [Validators.required, Validators.min(18), Validators.max(100)]],
+    //   // select
+    //   category: [''],
+    //   tag: [''],
+    //   // checkbox Radio
+    //   agree: [false, Validators.requiredTrue],
+    //   gender: [''],
+    //   zone: [''],
+    //   password: ['', MyValidators.validPassword],// simple valid field
+    //   confirmPassword: ['', Validators.required],
+    // },{
+    //   // error attached to forms not to field.
+    //   // validation de group
+    //   validators: MyValidators.matchPasswords
+    // });
+
     this.myFormGroup = this.myFormBuilder.group({
       fullName: this.myFormBuilder.group({
-        name: ['', [Validators.required, Validators.maxLength(10), Validators.pattern(/^[a-zA-Z ]+$/)]],
-        lastname: ['', [Validators.required, Validators.maxLength(10), Validators.pattern(/^[a-zA-Z ]+$/)]]
+        name: ['Michael'],
+        lastname: ['Benavides']
       }),
-      email: ['', [Validators.required, Validators.email]],
-      phone: ['',[Validators.required]],
-      color: [''],
+      email: ['test@test.com'],
+      phone: ['0987654321'],
+      color: ['#7b7474'],
+      logo: [''],
       date: [''],
-      age: [30, [Validators.required, Validators.min(18), Validators.max(100)]],
-      // select
+      age: [30],
       category: [''],
       tag: [''],
-      // checkbox Radio
-      agree: [false, Validators.requiredTrue],
+      agree: [false],
       gender: [''],
       zone: [''],
-      password: ['', MyValidators.validPassword],// simple valid field
-      confirmPassword: ['', Validators.required],
-    },{
-      // error attached to forms not to field.
-      // validation de group
-      validators: MyValidators.matchPasswords
+      password: ['123AZE'],
+      confirmPassword: ['123AZE'],
     });
 
   }
 
-  // NameField
+  // get myForm(){
+  //   return this.myFormGroup.controls;
+  // }
+
   get nameField() {
     return this.myFormGroup?.get('fullName')?.get('name');
   }
@@ -103,8 +136,6 @@ export class BasicFormComponent implements OnInit {
   get isNameFieldIsInValid() {
     return this.nameField?.touched && this.nameField.valid
   }
-    // End - NameField
-
 
   get emailField() {
     return this.myFormGroup.get('email');
@@ -154,6 +185,9 @@ export class BasicFormComponent implements OnInit {
     return this.myFormGroup.get('confirmPassword');
   }
 
+  get logoField() {
+    return this.myFormGroup.get('logo');
+  }
 
 
   getNameValue() {
@@ -161,15 +195,41 @@ export class BasicFormComponent implements OnInit {
   }
 
   save() {
-    console.log(this.myFormGroup);
-
     if (!this.myFormGroup.valid) {
       this.myFormGroup.markAllAsTouched();
       return;
     }
+    const model = this.parseModel(this.myFormGroup.value);
+    const formData = this.createFormModel(model);
+    this.addUser(formData);
+  }
 
-    const model = this.parseModel(this.myFormGroup.value)
-    this.addUser(model);
+  createFormModel(model: UserFormCreate){
+    const formData = new FormData();
+    formData.append('firstName', model.firstName);
+    formData.append('lastName', model.lastName);
+    formData.append('fullName', model.fullName);
+    formData.append('age', model.age.toString());
+    formData.append('logo', this.selectedFile, this.selectedFile?.name);
+
+    for (const index in model.tag) {
+      formData.append(`tags[${index}].id`, model.tag[index].id.toString());
+      formData.append(`tags[${index}].name`,  model.tag[index].name);
+    }
+    formData.append(`category.id`, model.category.id.toString());
+    formData.append(`category.name`, model.category.name);
+
+    var datestr = (new Date(model.date)).toUTCString();
+    formData.append("date", datestr);
+
+    formData.append(`email`, model.email);
+    formData.append(`password`, model.password);
+    formData.append(`phone`, model.phone);
+    formData.append(`color`, model.color);
+    formData.append(`gender`, model.gender);
+    formData.append(`agree`, model.agree.toString());
+
+    return formData;
   }
 
 
@@ -179,7 +239,6 @@ export class BasicFormComponent implements OnInit {
       lastName: formValue.fullName.lastname,
       fullName: `${formValue.fullName.name} ${formValue.fullName.lastname}`,
       age: formValue.age,
-      logo: formValue.logo,
       email: formValue.email,
       password: formValue.password,
       phone: formValue.phone,
@@ -190,18 +249,26 @@ export class BasicFormComponent implements OnInit {
       gender: formValue.gender,
       agree: formValue.agree,
     }
-
     return model;
   }
 
 
+  onFileChange(event: any) {
+    this.selectedFile = <File>event.target.files[0];
+    const reader = new FileReader();
+    if (event?.target?.files && event?.target?.files?.length) {
+      const [image] = event.target.files;
+      reader.readAsDataURL(image);
+      reader.onload = () => {
+        this.imageSrc = reader.result as string;
+      };
+    }
+  }
 
-  addUser(model: UserFormCreate) {
-    this.basicFormService.addData(model).subscribe(
-      x => {
-        console.log('Data Save');
-        this.router.navigate(['/basic-form']);
-      },
+
+  addUser(formData: FormData) {
+    this.basicFormService.addData(formData).subscribe(
+      event => console.log('Data Save'),
       error => console.log(error),
     );
   }

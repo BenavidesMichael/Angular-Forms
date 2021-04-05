@@ -42,7 +42,7 @@ namespace AngularFormsApi.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] UserModel model)
+        public async Task<ActionResult> Put(int id, [FromForm] UserModel model)
         {
             try
             {
@@ -55,10 +55,9 @@ namespace AngularFormsApi.Controllers
             }
         }
 
-
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] UserCreateModel model)
-        {
+        public async Task<ActionResult> Post([FromForm] UserCreateModel model)
+          {
             try
             {
                 await _userRepository.Create(model);

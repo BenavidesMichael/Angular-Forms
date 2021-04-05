@@ -23,6 +23,8 @@ namespace AngularFormsApi
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpContextAccessor();
+            
             services.AddDbContext<AngularFormsContext>(x =>
             {
                 x.UseSqlServer(this._configuration.GetConnectionString("DefaultConnectionString"));
@@ -38,6 +40,7 @@ namespace AngularFormsApi
             });
 
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<ILocalStorageRepository, LocalStorageRepository>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -59,6 +62,7 @@ namespace AngularFormsApi
             }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
             app.UseRouting();
 

@@ -1,9 +1,11 @@
 ﻿using AngularFormsApi.Contracts;
 using AngularFormsApi.DAL;
 using AngularFormsApi.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,10 +14,13 @@ namespace AngularFormsApi.Repository
     public class UserRepository : IUserRepository
     {
         private AngularFormsContext _db;
-        
-        public UserRepository(AngularFormsContext db)
+        private readonly ILocalStorageRepository _localStorageRepository;
+
+
+        public UserRepository(AngularFormsContext db, ILocalStorageRepository localStorageRepository)
         {
             _db = db;
+            _localStorageRepository = localStorageRepository;
         }
 
 
@@ -74,6 +79,7 @@ namespace AngularFormsApi.Repository
         {
             try
             {
+                await this.saveLogo(model.logo);
                 var userDb = new User()
                 {
                     FullName = $"{model.FirstName} {model.LastName}",
@@ -81,15 +87,14 @@ namespace AngularFormsApi.Repository
                     Agree = model.Agree,
                     Category = model.Category.Name,
                     Color = model.Color,
-                    Date = model.Date,
+                    Date = (DateTime)model.Date,
                     Email = model.Email,
                     FirstName = model.FirstName,
                     Gender = model.Gender,
                     LastName = model.LastName,
-                    logo = model.logo,
                     Password = model.Password,
                     Phone = model.Phone,
-                    Tag = model.Tag[0].Name,
+                    Tag = model.Tags[0].Name,
                 };
 
                 await _db.Users.AddAsync(userDb);
@@ -148,6 +153,28 @@ namespace AngularFormsApi.Repository
             {
                 throw ex;
             }
+        }
+
+        
+        private async Task<string> saveLogo(IFormFile logo)
+        {
+            string result = string.Empty;
+
+            if (logo != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await logo.CopyToAsync(memoryStream);
+                    byte[] content = memoryStream.ToArray();
+                    string extention = Path.GetExtension(logo.FileName);
+                    string contentType = logo.ContentType;
+                    string folder = "Images";
+
+                    result = await _localStorageRepository.SaveFile(content, extention, folder, contentType);
+                }
+            }
+
+            return result;
         }
 
     }

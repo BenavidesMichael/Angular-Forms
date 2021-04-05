@@ -6,7 +6,6 @@ export interface UserFormCreate {
   lastName: string;
   fullName: string;
   age: number;
-  logo: string;
   email: string;
   password: string;
   phone: string;
@@ -16,4 +15,5 @@ export interface UserFormCreate {
   agree: boolean;
   tag: Tag[];
   category: Category;
+  logo?: any;
 }

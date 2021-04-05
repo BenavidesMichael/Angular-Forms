@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UserForm } from '../models/user-fom';
 import { UserFormCreate } from '../models/user-form-create';
 
@@ -18,8 +18,13 @@ export class BasicFormService {
   }
 
 
-  addData(model: UserFormCreate) {
-    return this.httpClient.post(this.urlBase, model);
+  // addData(model: UserFormCreate) {
+  //   return this.httpClient.post(this.urlBase, model);
+  // }
+
+
+  addData(formData: any) {
+    return this.httpClient.post(this.urlBase, formData, {reportProgress: true, observe: 'events'});
   }
 
 
